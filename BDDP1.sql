@@ -20,6 +20,8 @@ inner join
 	ORDER by total_Ventas DESC
 end
 
+exec sp_TotVentas 2;
+
 /*
 b. Determinar el producto más solicitado para la región (atributo group de salesterritory)“Noth America”y en que territorio de la región tiene mayordemanda.Quitando el Top 1, da la lista de todos los productos
  * */
