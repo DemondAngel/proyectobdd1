@@ -3,8 +3,8 @@ package com.bddp1.model;
 import java.util.Objects;
 
 public class OrdenTerritorio {
-    private Long idTerritorioOrden;
-    private Long idTerritorioCliente;
+    private int idTerritorioOrden;
+    private int idTerritorioCliente;
     private String nameTerritorioOrden;
     private String nameTerritorioCliente;
 
@@ -13,7 +13,7 @@ public class OrdenTerritorio {
     }
 
 
-    public OrdenTerritorio(Long idTerritorioOrden, Long idTerritorioCliente, String nameTerritorioOrden, String nameTerritorioCliente) {
+    public OrdenTerritorio(int idTerritorioOrden, int idTerritorioCliente, String nameTerritorioOrden, String nameTerritorioCliente) {
         this.idTerritorioOrden = idTerritorioOrden;
         this.idTerritorioCliente = idTerritorioCliente;
         this.nameTerritorioOrden = nameTerritorioOrden;
@@ -21,19 +21,19 @@ public class OrdenTerritorio {
     }
 
 
-    public Long getIdTerritorioOrden() {
+    public int getIdTerritorioOrden() {
         return this.idTerritorioOrden;
     }
 
-    public void setIdTerritorioOrden(Long idTerritorioOrden) {
+    public void setIdTerritorioOrden(int idTerritorioOrden) {
         this.idTerritorioOrden = idTerritorioOrden;
     }
 
-    public Long getIdTerritorioCliente() {
+    public int getIdTerritorioCliente() {
         return this.idTerritorioCliente;
     }
 
-    public void setIdTerritorioCliente(Long idTerritorioCliente) {
+    public void setIdTerritorioCliente(int idTerritorioCliente) {
         this.idTerritorioCliente = idTerritorioCliente;
     }
 

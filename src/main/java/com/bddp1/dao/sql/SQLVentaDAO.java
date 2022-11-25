@@ -20,7 +20,7 @@ public class SQLVentaDAO implements VentaDAO{
 
 
     @Override
-    public List<Venta> getTotalVentasProducto(Long category) {
+    public List<Venta> getTotalVentasProducto(int category) {
         List<Venta> ventas = null;
         try{
             
@@ -29,7 +29,7 @@ public class SQLVentaDAO implements VentaDAO{
     
             StoredProcedureQuery storedProcedure = em.createStoredProcedureQuery(stored);
     
-            storedProcedure.registerStoredProcedureParameter("categoryID", Long.class, ParameterMode.IN);
+            storedProcedure.registerStoredProcedureParameter("categoryID", Integer.class, ParameterMode.IN);
             storedProcedure.setParameter("categoryID", category);
             ventas = storedProcedure.getResultList();
             em. getTransaction().commit();

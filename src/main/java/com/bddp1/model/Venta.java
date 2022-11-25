@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public class Venta{
 
-    private Long territoryID;
+    private int territoryID;
     private String nameTerritory;
     private float totalVentas;
 
@@ -14,18 +14,18 @@ public class Venta{
     }
 
 
-    public Venta(Long territoryID, String nameTerritory, float totalVentas) {
+    public Venta(int territoryID, String nameTerritory, float totalVentas) {
         this.territoryID = territoryID;
         this.nameTerritory = nameTerritory;
         this.totalVentas = totalVentas;
     }
 
 
-    public Long getTerritoryID() {
+    public int getTerritoryID() {
         return this.territoryID;
     }
 
-    public void setTerritoryID(Long territoryID) {
+    public void setTerritoryID(int territoryID) {
         this.territoryID = territoryID;
     }
 

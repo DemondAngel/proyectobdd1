@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public class ProductoVendido{
 
-    private Long productID;
+    private int productID;
     private String nombre;
     private float totalVentas;
 
@@ -12,17 +12,17 @@ public class ProductoVendido{
     public ProductoVendido() {
     }
 
-    public ProductoVendido(Long productID, String nombre, float totalVentas) {
+    public ProductoVendido(int productID, String nombre, float totalVentas) {
         this.productID = productID;
         this.nombre = nombre;
         this.totalVentas = totalVentas;
     }
 
-    public Long getProductID() {
+    public int getProductID() {
         return this.productID;
     }
 
-    public void setProductID(Long productID) {
+    public void setProductID(int productID) {
         this.productID = productID;
     }
 

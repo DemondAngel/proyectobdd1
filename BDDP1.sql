@@ -2,7 +2,7 @@ use AdventureWorks2019;
 /*Equipo 10 */
 /*
 a.
- Determinar el total de las ventas de los productos con la categoría que se proveade argumento de entrada en la consulta,para cada uno de los territorios registradosen la base de datos.
+ Determinar el total de las ventas de los productos con la categorï¿½a que se proveade argumento de entrada en la consulta,para cada uno de los territorios registradosen la base de datos.
  * */
 
 CREATE PROCEDURE sp_TotVentas @categoryID int as
@@ -23,7 +23,7 @@ end
 exec sp_TotVentas 2;
 
 /*
-b. Determinar el producto más solicitado para la región (atributo group de salesterritory)“Noth America”y en que territorio de la región tiene mayordemanda.Quitando el Top 1, da la lista de todos los productos
+b. Determinar el producto mï¿½s solicitado para la regiï¿½n (atributo group de salesterritory)ï¿½Noth Americaï¿½y en que territorio de la regiï¿½n tiene mayordemanda.Quitando el Top 1, da la lista de todos los productos
  * */
 
 CREATE PROCEDURE sp_ProdMasSolicitado @Territory nvarchar(50) AS
@@ -38,10 +38,13 @@ inner join(SELECT ProductID, lineTotal FROM AdventureWorks2019.Sales.SalesOrderD
 	on
 	Prod.ProductID = Tabla.ProductID GROUP BY Prod.Name, Prod.ProductID ORDER by
 	total_ventas DESC
-END 
+END
 
-/* c. Actualizar el stock disponible en un 5% de los productos de la categoría que se  provea como argumento de entrada en una localidad que se provea como entrada en 
- la instrucción de actualización..
+select * from AdventureWorks2019.Sales.SalesTerritory;
+exec sp_ProdMasSolicitado 'North America';
+
+/* c. Actualizar el stock disponible en un 5% de los productos de la categorï¿½a que se  provea como argumento de entrada en una localidad que se provea como entrada en 
+ la instrucciï¿½n de actualizaciï¿½n..
  NOTA: De momento solo consulta el producto con stock, dependiendo la localidad 
 	 * */
 
@@ -60,7 +63,7 @@ BEGIN
 END
 
 
-/* Determinar si hay clientes que realizan ordenes en territorios diferentes al que se encuentran. 
+/* d. Determinar si hay clientes que realizan ordenes en territorios diferentes al que se encuentran. 
 	 */
 
 CREATE PROCEDURE sp_CustomerDiferrentOrder  AS 
@@ -72,7 +75,7 @@ GROUP by scus.TerritoryID, soh.TerritoryID
 END
 
 /*
- Actualizar  la  cantidad  de  productos  de  una  orden que  se provea  como argumento en la instrucción de actualización.
+ e. Actualizar  la  cantidad  de  productos  de  una  orden que  se provea  como argumento en la instrucciï¿½n de actualizaciï¿½n.
 NOTA: Lista la cantidad de productos, nombre y el ID de la Orden de venta
 	 * */
 
@@ -91,7 +94,7 @@ END
 	
 
 /*
- Actualizar el método de envío de una orden que se reciba como argumento en la instrucción de actualización.  NOTA: Lista todas las ordenenes dependiendo el metodo de envio
+f.  Actualizar el mï¿½todo de envï¿½o de una orden que se reciba como argumento en la instrucciï¿½n de actualizaciï¿½n.  NOTA: Lista todas las ordenenes dependiendo el metodo de envio
  */	
 	
 CREATE PROCEDURE sp_ActualizarMetEnvio @SOID int,@SHIPMTHID int AS
@@ -109,7 +112,7 @@ BEGIN
 END
 
 /*
- Actualizar el correo electrónico de una cliente que se reciba como argumento en la instrucción de actualización. NOTA: Lista a la persona y su correElectronico, parametrizar por correo electronico, en lugar de BusinessEntityID
+ g Actualizar el correo electrï¿½nico de una cliente que se reciba como argumento en la instrucciï¿½n de actualizaciï¿½n. NOTA: Lista a la persona y su correElectronico, parametrizar por correo electronico, en lugar de BusinessEntityID
  */
 
 ALTER PROCEDURE sp_ActualizaEmail @EmailActual nvarchar(50), @EmailNuevo nvarchar(50) AS 

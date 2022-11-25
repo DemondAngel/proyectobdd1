@@ -38,7 +38,7 @@ public class SQLProductoDAO implements ProductoDAO{
     }
 
     @Override
-    public boolean updateStock(Long category) {
+    public boolean updateStock(int category) {
         boolean update = false;
         try{
             
@@ -47,7 +47,7 @@ public class SQLProductoDAO implements ProductoDAO{
     
             StoredProcedureQuery storedProcedure = em.createStoredProcedureQuery(stored);
     
-            storedProcedure.registerStoredProcedureParameter("Categ", Long.class, ParameterMode.IN);
+            storedProcedure.registerStoredProcedureParameter("Categ", Integer.class, ParameterMode.IN);
             storedProcedure.setParameter("Categ", category);
             update = storedProcedure.execute();
             em. getTransaction().commit();

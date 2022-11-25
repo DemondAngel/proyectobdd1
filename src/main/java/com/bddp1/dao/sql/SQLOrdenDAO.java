@@ -38,7 +38,7 @@ public class SQLOrdenDAO implements OrdenDAO{
     }
 
     @Override
-    public boolean updateProductsOrder(Long idSalesOrder, int quantity) {
+    public boolean updateProductsOrder(int idSalesOrder, int quantity) {
         boolean update = false;
         try{
             
@@ -47,10 +47,34 @@ public class SQLOrdenDAO implements OrdenDAO{
     
             StoredProcedureQuery storedProcedure = em.createStoredProcedureQuery(stored);
     
-            storedProcedure.registerStoredProcedureParameter("SOID", Long.class, ParameterMode.IN);
+            storedProcedure.registerStoredProcedureParameter("SOID", Integer.class, ParameterMode.IN);
             storedProcedure.registerStoredProcedureParameter("SOCant", Integer.class, ParameterMode.IN);
             storedProcedure.setParameter("SOID", idSalesOrder);
             storedProcedure.setParameter("SOCant", quantity);
+            update = storedProcedure.execute();
+            em. getTransaction().commit();
+        }
+        catch(Exception e){
+            e.getStackTrace();
+        }
+
+        return update;
+    }
+
+    @Override
+    public boolean updateOrdenDeliver(int idSalesOrder, int shipMethodID) {
+        boolean update = false;
+        try{
+            
+            String stored = "sp_ActualizarMetEnvio";
+            em.getTransaction().begin();
+    
+            StoredProcedureQuery storedProcedure = em.createStoredProcedureQuery(stored);
+    
+            storedProcedure.registerStoredProcedureParameter("SOID", Integer.class, ParameterMode.IN);
+            storedProcedure.registerStoredProcedureParameter("SHIPMTHID", Integer.class, ParameterMode.IN);
+            storedProcedure.setParameter("SOID", idSalesOrder);
+            storedProcedure.setParameter("SHIPMTHID", shipMethodID);
             update = storedProcedure.execute();
             em. getTransaction().commit();
         }
