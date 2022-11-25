@@ -2,7 +2,7 @@ package com.bddp1.model;
 
 import java.util.Objects;
 
-class ProductoVendido{
+public class ProductoVendido{
 
     private Long productID;
     private String nombre;
