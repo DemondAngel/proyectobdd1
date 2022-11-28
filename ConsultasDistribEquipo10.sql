@@ -50,19 +50,17 @@ exec sp_ProdMasSolicitado 'North America'
 
 	 /*]?????????????????????????????????????????????*/
 	drop procedure if exists sp_ActualizarStock;
-	 CREATE or alter PROCEDURE sp_ActualizarStock @Categ int 
+	 CREATE or alter PROCEDURE sp_ActualizarStock @Categ int, @pId int out 
 AS
 BEGIN
-	DECLARE @pId int;
 
-	set @pId = (SELECT ProductID FROM [PRODUCTIONAW].productionAW.Production.ProductInventory pii WHERE
-	pii.LocationID in(SELECT ProductID FROM [PRODUCTIONAW].productionAW.Production.ProductSubcategory WHERE ProductCategoryID = @Categ));
+	SELECT @pId = ProductID FROM [PRODUCTIONAW].productionAW.Production.ProductInventory pii WHERE
+	pii.LocationID in(SELECT ProductID FROM [PRODUCTIONAW].productionAW.Production.ProductSubcategory WHERE ProductCategoryID = @Categ);
 
 	
-	begin distributed transaction;
+	/*begin distributed transaction;
 	update PRODUCTIONAW.productionAW.Production.ProductInventory set Quantity = Quantity*1.05 WHERE ProductID = @pId;
-	commit transaction;
-	select 'Actualizado'; 
+	commit transaction; */
 END
 select * from PRODUCTIONAW.productionAW.Production.ProductInventory where ProductID = 1;
 exec sp_ActualizarStock '1'
@@ -70,7 +68,7 @@ exec sp_ActualizarStock '1'
 /* Determinar si hay clientes que realizan ordenes en territorios diferentes al que se encuentran. 
 	 */
 
-
+drop procedure if exists sp_CustomerDiferrentOrder;
 CREATE or alter PROCEDURE sp_CustomerDiferrentOrder  AS 
 BEGIN
 SELECT scus.TerritoryID as Territorio_Cliente, soh.TerritoryID as Territorio_Orden, st.[Name] as Nombre_Territorio
@@ -79,22 +77,25 @@ inner join SALESAW.SalesAW.Sales.SalesOrderHeader soh on scus.CustomerID != soh.
 inner join SALESAW.SalesAW.[Sales].[SalesTerritory] st on scus.TerritoryID = st.TerritoryID
 GROUP by scus.TerritoryID, soh.TerritoryID, st.[Name]
 END
+exec sp_CustomerDiferrentOrder;
+
 /*
  Actualizar  la  cantidad  de  productos  de  una  orden que  se provea  como argumento en la instrucción de actualización.
 NOTA: Lista la cantidad de productos, nombre y el ID de la Orden de venta
 	 * */
 
-CREATE or alter PROCEDURE sp_ActualizarCant @SOID int, @SOCant int
+CREATE or alter PROCEDURE sp_ActualizarCant @SOID int, @SOCant int, @EXISTSSOID out
 AS
 BEGIN
+	
 	IF EXISTS (SELECT sod.OrderQty as Cantidad_Productos, Prod.Name as Nombre_Producto, sod.SalesOrderID
 	FROM  SALESAW.SalesAW.Sales.SalesOrderDetail sod
 	inner join [PRODUCTIONAW].productionAW.Production.Product Prod 
 	on sod.ProductID = Prod.ProductID and sod.SalesOrderID = @SOID) 
-
-	update  SALESAW.SalesAW.Sales.SalesOrderDetail set OrderQty = @SOCant where SalesOrderID = @SOID
+	select @EXISTSOID = 1;
+	/*update  SALESAW.SalesAW.Sales.SalesOrderDetail set OrderQty = @SOCant where SalesOrderID = @SOID */
 	ELSE 
-	PRINT 'SIN ACTUALIZAR'
+	select @EXISTSOID = 0;
 END
 	
 
@@ -102,25 +103,27 @@ END
  Actualizar el método de envío de una orden que se reciba como argumento en la instrucción de actualización.  NOTA: Lista todas las ordenenes dependiendo el metodo de envio
  */	
 	
-CREATE or alter PROCEDURE sp_ActualizarMetEnvio @SOID int,@SHIPMTHID int AS
+CREATE or alter PROCEDURE sp_ActualizarMetEnvio @SOID int,@SHIPMTHID int, @EXISTSID out AS
 BEGIN 
+	
 	IF EXISTS (SELECT MetEnv.Name as Metodo_Envio, MetEnv.ShipMethodID as ID_Metodo,
 	soh.ShipMethodID as ID_Metodo_Seleccionado, soh.SalesOrderID
 	FROM  SALESAW.SalesAW.Sales.SalesOrderHeader soh inner join SALESAW.SalesAW.Purchasing.ShipMethod MetEnv
 	on soh.ShipMethodID = MetEnv.ShipMethodID
 	where soh.SalesOrderID = @SOID)
+	UPDATE AdventureWorks2019.Sales.SalesOrderHeader set ShipMethodID = @SHIPMTHID WHERE SalesOrderID = @SOID;
+	select @EXISTSID = 1;
 
-
-	UPDATE AdventureWorks2019.Sales.SalesOrderHeader set ShipMethodID = @SHIPMTHID WHERE SalesOrderID = @SOID
+	 
 	ELSE 
-		PRINT 'SIN ACTUALIZAR'
+		select @EXISTSID = 0;
 END
 
 /*
  Actualizar el correo electrónico de una cliente que se reciba como argumento en la instrucción de actualización. NOTA: Lista a la persona y su correElectronico, parametrizar por correo electronico, en lugar de BusinessEntityID
  */
 
-create or ALTER PROCEDURE sp_ActualizarEmail @EmailActual nvarchar(50), @EmailNuevo nvarchar(50) AS 
+create or ALTER PROCEDURE sp_ActualizarEmail @EmailActual nvarchar(50), @EmailNuevo nvarchar(50) AS, @EXISTSID int out
 BEGIN 
 	IF EXISTS (
 		SELECT Pers.FirstName as Nombre, Email.EmailAddress as Email
@@ -129,9 +132,10 @@ BEGIN
 	on Pers.BusinessEntityID = Email.BusinessEntityID 
 	where Email.EmailAddress = @EmailActual
 	)
-	UPDATE SALESAW.SalesAW.Person.EmailAddress set EmailAddress = @EmailNuevo  WHERE EmailAddressID = @EmailActual
+	select @EXISTSID = 1;
+	/*UPDATE SALESAW.SalesAW.Person.EmailAddress set EmailAddress = @EmailNuevo  WHERE EmailAddressID = @EmailActual*/
 	ELSE 
-		PRINT 'SIN ACTUALIZAR'
+		select @EXISTSID = 0;
 	
 END
 

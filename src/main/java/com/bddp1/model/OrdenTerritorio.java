@@ -6,20 +6,15 @@ public class OrdenTerritorio {
     private int idTerritorioOrden;
     private int idTerritorioCliente;
     private String nameTerritorioOrden;
-    private String nameTerritorioCliente;
-
 
     public OrdenTerritorio() {
     }
 
-
-    public OrdenTerritorio(int idTerritorioOrden, int idTerritorioCliente, String nameTerritorioOrden, String nameTerritorioCliente) {
+    public OrdenTerritorio(int idTerritorioOrden, int idTerritorioCliente, String nameTerritorioOrden) {
         this.idTerritorioOrden = idTerritorioOrden;
         this.idTerritorioCliente = idTerritorioCliente;
         this.nameTerritorioOrden = nameTerritorioOrden;
-        this.nameTerritorioCliente = nameTerritorioCliente;
     }
-
 
     public int getIdTerritorioOrden() {
         return this.idTerritorioOrden;
@@ -45,15 +40,6 @@ public class OrdenTerritorio {
         this.nameTerritorioOrden = nameTerritorioOrden;
     }
 
-    public String getNameTerritorioCliente() {
-        return this.nameTerritorioCliente;
-    }
-
-    public void setNameTerritorioCliente(String nameTerritorioCliente) {
-        this.nameTerritorioCliente = nameTerritorioCliente;
-    }
-
-
     @Override
     public boolean equals(Object o) {
         if (o == this)
@@ -62,23 +48,23 @@ public class OrdenTerritorio {
             return false;
         }
         OrdenTerritorio OrdenTerritorio = (OrdenTerritorio) o;
-        return Objects.equals(idTerritorioOrden, OrdenTerritorio.idTerritorioOrden) && Objects.equals(idTerritorioCliente, OrdenTerritorio.idTerritorioCliente) && Objects.equals(nameTerritorioOrden, OrdenTerritorio.nameTerritorioOrden) && Objects.equals(nameTerritorioCliente, OrdenTerritorio.nameTerritorioCliente);
+        return Objects.equals(idTerritorioOrden, OrdenTerritorio.idTerritorioOrden)
+                && Objects.equals(idTerritorioCliente, OrdenTerritorio.idTerritorioCliente)
+                && Objects.equals(nameTerritorioOrden, OrdenTerritorio.nameTerritorioOrden);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idTerritorioOrden, idTerritorioCliente, nameTerritorioOrden, nameTerritorioCliente);
+        return Objects.hash(idTerritorioOrden, idTerritorioCliente, nameTerritorioOrden);
     }
-
 
     @Override
     public String toString() {
         return "{" +
-            " idTerritorioOrden='" + getIdTerritorioOrden() + "'" +
-            ", idTerritorioCliente='" + getIdTerritorioCliente() + "'" +
-            ", nameTerritorioOrden='" + getNameTerritorioOrden() + "'" +
-            ", nameTerritorioCliente='" + getNameTerritorioCliente() + "'" +
-            "}";
+                " idTerritorioOrden='" + getIdTerritorioOrden() + "'" +
+                ", idTerritorioCliente='" + getIdTerritorioCliente() + "'" +
+                ", nameTerritorioOrden='" + getNameTerritorioOrden() + "'" +
+                "}";
     }
 
 }

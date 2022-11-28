@@ -21,54 +21,83 @@ import com.bddp1.model.ProductoVendido;
 public class MainApplication {
 
 	public static void main(String[] args) {
-		//SpringApplication.run(MainApplication.class, args);
+		// SpringApplication.run(MainApplication.class, args);
 		EntityManagerFactory mf = null;
 		EntityManager em = null;
 
-		ProductoVendido productoVendido  = null;
-
-		try{
-			mf = Persistence.createEntityManagerFactory("persistencia");
-			em = mf.createEntityManager();
-			
-			ProductoDAO sqlVentaDAO = new SQLProductoDAO(em);
-
-			boolean actualizado = sqlVentaDAO.updateStock(1);
-
-				System.out.println(actualizado ? "Se actualizó con éxito el producto": "Hubo un problema al actualizar los productos");
-			
-
-			System.out.println("Conexión realizada con exito");
-		}
-		catch(Exception e){
-			System.out.println("No se pudo realizar la conexion");
-			//System.out.println(e.toString());
-
-		}
-		finally{
-
-			try{
-				if(em != null){
-					em.close();
-				}
-				
-		
-			}
-			catch(Exception e){
-
-			}
-
-			try{
-				if(mf != null){
-					mf.close();
-				}
-				
-			}
-			catch(Exception e){
-
-			}
-
-		}
+		/*
+		 * ProductoVendido productoVendido = null;
+		 * int pId = 0;
+		 * try {
+		 * mf = Persistence.createEntityManagerFactory("persistencia");
+		 * em = mf.createEntityManager();
+		 * 
+		 * ProductoDAO sqlVentaDAO = new SQLProductoDAO(em);
+		 * 
+		 * pId = sqlVentaDAO.getProductIdtoUpdate(1);
+		 * 
+		 * System.out.println("Conexión realizada con exito");
+		 * } catch (Exception e) {
+		 * System.out.println("No se pudo realizar la conexion");
+		 * // System.out.println(e.toString());
+		 * 
+		 * } finally {
+		 * 
+		 * try {
+		 * if (em != null) {
+		 * em.close();
+		 * }
+		 * 
+		 * } catch (Exception e) {
+		 * 
+		 * }
+		 * 
+		 * try {
+		 * if (mf != null) {
+		 * mf.close();
+		 * }
+		 * 
+		 * } catch (Exception e) {
+		 * 
+		 * }
+		 * 
+		 * }
+		 * 
+		 * try {
+		 * mf = Persistence.createEntityManagerFactory("persistenciaProduction");
+		 * em = mf.createEntityManager();
+		 * 
+		 * ProductoDAO sqlVentaDAO = new SQLProductoDAO(em);
+		 * 
+		 * pId = sqlVentaDAO.updateStock(pId);
+		 * 
+		 * System.out.println("Conexión realizada con exito");
+		 * } catch (Exception e) {
+		 * System.out.println("No se pudo realizar la conexion");
+		 * // System.out.println(e.toString());
+		 * 
+		 * } finally {
+		 * 
+		 * try {
+		 * if (em != null) {
+		 * em.close();
+		 * }
+		 * 
+		 * } catch (Exception e) {
+		 * 
+		 * }
+		 * 
+		 * try {
+		 * if (mf != null) {
+		 * mf.close();
+		 * }
+		 * 
+		 * } catch (Exception e) {
+		 * 
+		 * }
+		 * 
+		 * }
+		 */
 	}
 
 }

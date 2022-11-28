@@ -16,4 +16,20 @@
         <!-- <property name="hibernate.hbm2ddl.auto" value="validate"/> -->
     </properties>
   </persistence-unit>
+
+   <persistence-unit name="persistenciaProduction">
+  	<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+    
+    <properties>
+        <property name="javax.persistence.jdbc.url" value="jdbc:sqlserver://bdd-practicas.database.windows.net:1433;database=productionAW;integratedSecurity=false;encrypt=true;trustServerCertificate=true"/>
+        <property name="javax.persistence.jdbc.user" value="superadmin"/>
+        <property name="javax.persistence.jdbc.password" value="N0m3l010"/>
+        <property name="javax.persistence.jdbc.driver" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
+        
+        <property name="hibernate.show_sql" value="true"/>
+        <property name="hibernate.format_sql" value="true"/>
+        <property name="hibernate.dialect" value="org.hibernate.dialect.SQLServerDialect"/>
+        <!-- <property name="hibernate.hbm2ddl.auto" value="validate"/> -->
+    </properties>
+  </persistence-unit>
 </persistence>
