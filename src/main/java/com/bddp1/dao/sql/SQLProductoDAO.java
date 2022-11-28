@@ -1,5 +1,8 @@
 package com.bddp1.dao.sql;
 
+import java.math.BigDecimal;
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.ParameterMode;
 import javax.persistence.StoredProcedureQuery;
@@ -27,7 +30,15 @@ public class SQLProductoDAO implements ProductoDAO{
     
             storedProcedure.registerStoredProcedureParameter("Territory", String.class, ParameterMode.IN);
             storedProcedure.setParameter("Territory", territory);
-            productoVendido = (ProductoVendido) storedProcedure.getSingleResult();
+            storedProcedure.execute();
+            List<Object[]> result = storedProcedure.getResultList();
+
+            if(!result.isEmpty()){
+
+                productoVendido = new ProductoVendido((int) result.get(0)[2], (String) result.get(0)[1], (BigDecimal) result.get(0)[0]);
+
+            }
+
             em. getTransaction().commit();
         }
         catch(Exception e){
@@ -47,13 +58,14 @@ public class SQLProductoDAO implements ProductoDAO{
     
             StoredProcedureQuery storedProcedure = em.createStoredProcedureQuery(stored);
     
-            storedProcedure.registerStoredProcedureParameter("Categ", Integer.class, ParameterMode.IN);
-            storedProcedure.setParameter("Categ", category);
-            update = storedProcedure.execute();
-            em. getTransaction().commit();
+            storedProcedure.registerStoredProcedureParameter(1, Integer.class, ParameterMode.IN);
+            storedProcedure.setParameter(1, category);
+            storedProcedure.execute();
+            em.getTransaction().commit();
         }
         catch(Exception e){
             e.getStackTrace();
+            System.out.println(e.getLocalizedMessage());
         }
 
         return update;

@@ -3,10 +3,11 @@
 1.
  Determinar el total de las ventas de los productos con la categoría que se proveade argumento de entrada en la consulta,para cada uno de los territorios registradosen la base de datos.
  * */
-
+use AdventureWorks2019;
+drop procedure if exists sp_TotVentas;
 CREATE or alter PROCEDURE sp_TotVentas @categoryID int as
 begin 
-	SELECT soh.TerritoryID, SUM(Tabla.lineTotal) as total_Ventas, st.[Name] FROM  SALESAW.salesAW.Sales.SalesOrderHeader soh
+	SELECT soh.territoryID, SUM(Tabla.lineTotal) as totalVentas, st.[Name] as nameTerritory FROM  SALESAW.salesAW.Sales.SalesOrderHeader soh
 inner join
     (SELECT SalesOrderID, productId, orderqty, lineTotal
 		FROM  SALESAW.salesAW.Sales.SalesOrderDetail sod
@@ -18,14 +19,14 @@ inner join
 
 inner join SALESAW.SalesAW.[Sales].[SalesTerritory] st on soh.TerritoryID = st.TerritoryID
 	GROUP by soh.TerritoryId, st.[Name]
-	ORDER by total_Ventas DESC
+	ORDER by totalVentas DESC
 end
 
-
+exec sp_TotVentas 2;
 
 /*Determinar el producto más solicitado para la región (atributo group de salesterritory)“Noth America”y en que territorio de la región tiene mayordemanda.Quitando el Top 1, da la lista de todos los productos
  * */
-
+drop procedure if exists sp_ProdMasSolicitado;
 CREATE or alter PROCEDURE sp_ProdMasSolicitado @Territory nvarchar(50) AS
 BEGIN 
 SELECT
@@ -38,7 +39,9 @@ inner join(SELECT ProductID, lineTotal FROM  SALESAW.SalesAW.Sales.SalesOrderDet
 	on
 	Prod.ProductID = Tabla.ProductID GROUP BY Prod.Name, Prod.ProductID ORDER by
 	total_ventas DESC
-END 
+END
+
+exec sp_ProdMasSolicitado 'North America'
 
 /* Actualizar el stock disponible en un 5% de los productos de la categoría que se  provea como argumento de entrada en una localidad que se provea como entrada en 
  la instrucción de actualización..
@@ -46,17 +49,23 @@ END
 	 * */
 
 	 /*]?????????????????????????????????????????????*/
-	 CREATE or alter PROCEDURE sp_ActualizarStock @Categ nvarchar(50) 
+	drop procedure if exists sp_ActualizarStock;
+	 CREATE or alter PROCEDURE sp_ActualizarStock @Categ int 
 AS
-BEGIN 
+BEGIN
 	DECLARE @pId int;
 
 	set @pId = (SELECT ProductID FROM [PRODUCTIONAW].productionAW.Production.ProductInventory pii WHERE
 	pii.LocationID in(SELECT ProductID FROM [PRODUCTIONAW].productionAW.Production.ProductSubcategory WHERE ProductCategoryID = @Categ));
 
-	update [PRODUCTIONAW].productionAW.Production.ProductInventory set Quantity = Quantity*1.05 WHERE ProductID = @pId;
-
+	
+	begin distributed transaction;
+	update PRODUCTIONAW.productionAW.Production.ProductInventory set Quantity = Quantity*1.05 WHERE ProductID = @pId;
+	commit transaction;
+	select 'Actualizado'; 
 END
+select * from PRODUCTIONAW.productionAW.Production.ProductInventory where ProductID = 1;
+exec sp_ActualizarStock '1'
 
 /* Determinar si hay clientes que realizan ordenes en territorios diferentes al que se encuentran. 
 	 */

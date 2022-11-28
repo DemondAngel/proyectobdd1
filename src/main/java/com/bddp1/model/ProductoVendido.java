@@ -1,18 +1,19 @@
 package com.bddp1.model;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 
 public class ProductoVendido{
 
     private int productID;
     private String nombre;
-    private float totalVentas;
+    private BigDecimal totalVentas;
 
 
     public ProductoVendido() {
     }
 
-    public ProductoVendido(int productID, String nombre, float totalVentas) {
+    public ProductoVendido(int productID, String nombre, BigDecimal totalVentas) {
         this.productID = productID;
         this.nombre = nombre;
         this.totalVentas = totalVentas;
@@ -34,11 +35,11 @@ public class ProductoVendido{
         this.nombre = nombre;
     }
 
-    public float getTotalVentas() {
+    public BigDecimal getTotalVentas() {
         return this.totalVentas;
     }
 
-    public void setTotalVentas(float totalVentas) {
+    public void setTotalVentas(BigDecimal totalVentas) {
         this.totalVentas = totalVentas;
     }
 
