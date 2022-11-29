@@ -16,20 +16,18 @@ public class SQLClienteDAO implements ClienteDAO {
     }
 
     @Override
-    public int updateEmail(String emailActual, String emailNuevo) {
+    public int proveEmail(String emailActual) {
         int update = 0;
         try {
 
-            String stored = "sp_ActualizarCant";
+            String stored = "sp_ActualizarEmail";
             em.getTransaction().begin();
 
             StoredProcedureQuery storedProcedure = em.createStoredProcedureQuery(stored);
 
             storedProcedure.registerStoredProcedureParameter("EmailActual", String.class, ParameterMode.IN);
-            storedProcedure.registerStoredProcedureParameter("EmailNuevo", String.class, ParameterMode.IN);
             storedProcedure.registerStoredProcedureParameter("EXISTSID", Integer.class, ParameterMode.OUT);
             storedProcedure.setParameter("EmailActual", emailActual);
-            storedProcedure.setParameter("EmailNuevo", emailNuevo);
             storedProcedure.execute();
             update = (int) storedProcedure.getOutputParameterValue("EXISTSID");
             em.getTransaction().commit();
@@ -41,12 +39,12 @@ public class SQLClienteDAO implements ClienteDAO {
     }
 
     @Override
-    public int proveEmail(String emailActual, String emailNuevo) {
+    public int updateEmail(int idEmail, String emailNuevo) {
         int update = 0;
         try {
 
-            String stored = "UPDATE SalesAW.Person.EmailAddress set EmailAddress = " + emailNuevo
-                    + " WHERE EmailAddressID = " + emailNuevo + ";";
+            String stored = "UPDATE SalesAW.Person.EmailAddress set EmailAddress = '" + emailNuevo
+                    + "' WHERE EmailAddressID = '" + idEmail + "';";
             em.getTransaction().begin();
 
             Query q = em.createNativeQuery(stored);

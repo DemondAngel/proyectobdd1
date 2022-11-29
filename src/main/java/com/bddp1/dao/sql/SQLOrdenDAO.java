@@ -48,7 +48,7 @@ public class SQLOrdenDAO implements OrdenDAO {
     }
 
     @Override
-    public int proveProductsOrder(int idSalesOrder, int quantity) {
+    public int proveProductsOrder(int idSalesOrder) {
         int exists = 0;
         try {
 
@@ -58,9 +58,8 @@ public class SQLOrdenDAO implements OrdenDAO {
             StoredProcedureQuery storedProcedure = em.createStoredProcedureQuery(stored);
 
             storedProcedure.registerStoredProcedureParameter("SOID", Integer.class, ParameterMode.IN);
-            storedProcedure.registerStoredProcedureParameter("SOCant", Integer.class, ParameterMode.IN);
+            storedProcedure.registerStoredProcedureParameter("EXISTSSOID", Integer.class, ParameterMode.OUT);
             storedProcedure.setParameter("SOID", idSalesOrder);
-            storedProcedure.setParameter("SOCant", quantity);
             storedProcedure.execute();
 
             exists = (int) storedProcedure.getOutputParameterValue("EXISTSSOID");
@@ -84,7 +83,7 @@ public class SQLOrdenDAO implements OrdenDAO {
 
             storedProcedure.registerStoredProcedureParameter("SOID", Integer.class, ParameterMode.IN);
             storedProcedure.registerStoredProcedureParameter("SHIPMTHID", Integer.class, ParameterMode.IN);
-            storedProcedure.registerStoredProcedureParameter("EXISTSID", Integer.class, ParameterMode.IN);
+            storedProcedure.registerStoredProcedureParameter("EXISTSID", Integer.class, ParameterMode.OUT);
             storedProcedure.setParameter("SOID", idSalesOrder);
             storedProcedure.setParameter("SHIPMTHID", shipMethodID);
             storedProcedure.execute();
