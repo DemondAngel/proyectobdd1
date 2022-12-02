@@ -282,7 +282,7 @@ public class BDD extends javax.swing.JFrame {
                 TiVar1.setText("");
                 TiVar2.setText("Email nuevo:");
                 Var1.enable(false);
-                //Var1.setText("");
+                // Var1.setText("");
                 Var2.setText("");
                 Descripcion.setText(
                         "<html>Actualizar el correo electrónico de una cliente que se reciba como<br>  argumento en la instrucción de actualización.</html>");
@@ -453,7 +453,9 @@ public class BDD extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(rootPane, "Error", "Confirmación",
                             JOptionPane.CLOSED_OPTION);
                 } else {
-                    verResultados.setVisible(true);
+                    JOptionPane.showMessageDialog(rootPane, "Actualización realizada con éxito", "Confirmación",
+                            JOptionPane.CLOSED_OPTION);
+                    // verResultados.setVisible(true);
                 }
                 break;
             }
