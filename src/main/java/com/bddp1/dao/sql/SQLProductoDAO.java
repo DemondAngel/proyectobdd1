@@ -22,7 +22,6 @@ public class SQLProductoDAO implements ProductoDAO {
     @Override
     public ProductoVendido getProdMoreRequested(String territory) {
         ProductoVendido productoVendido = null;
-        try {
 
             String stored = "sp_ProdMasSolicitado";
             em.getTransaction().begin();
@@ -42,17 +41,12 @@ public class SQLProductoDAO implements ProductoDAO {
             }
 
             em.getTransaction().commit();
-        } catch (Exception e) {
-            e.getStackTrace();
-        }
 
         return productoVendido;
     }
 
     @Override
-    public int getProductIdtoUpdate(int category) {
-        int pId = 0;
-        try {
+    public void getProductIdtoUpdate(int category) {
 
             String stored = "sp_ActualizarStock";
             em.getTransaction().begin();
@@ -60,38 +54,10 @@ public class SQLProductoDAO implements ProductoDAO {
             StoredProcedureQuery storedProcedure = em.createStoredProcedureQuery(stored);
 
             storedProcedure.registerStoredProcedureParameter(1, Integer.class, ParameterMode.IN);
-            storedProcedure.registerStoredProcedureParameter(2, Integer.class, ParameterMode.OUT);
             storedProcedure.setParameter(1, category);
             storedProcedure.execute();
-            pId = (int) storedProcedure.getOutputParameterValue(2);
             em.getTransaction().commit();
-        } catch (Exception e) {
-            e.getStackTrace();
-            System.out.println(e.getLocalizedMessage());
-        }
-
-        return pId;
-    }
-
-    @Override
-    public int updateStock(int pId) {
-
-        int update = 0;
-        try {
-
-            String stored = "update productionAW.Production.ProductInventory set Quantity = Quantity*1.05 WHERE ProductID ="
-                    + Integer.toString(pId) + ";";
-            em.getTransaction().begin();
-
-            Query q = em.createNativeQuery(stored);
-            update = q.executeUpdate();
-            em.getTransaction().commit();
-        } catch (Exception e) {
-            e.getStackTrace();
-            System.out.println(e.getLocalizedMessage());
-        }
-
-        return update;
+        
     }
 
 }

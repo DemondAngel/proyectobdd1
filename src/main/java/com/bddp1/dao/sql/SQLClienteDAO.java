@@ -16,9 +16,7 @@ public class SQLClienteDAO implements ClienteDAO {
     }
 
     @Override
-    public int proveEmail(String emailActual) {
-        int update = 0;
-        try {
+    public void updateEmail(String emailActual, String emailNuevo) {
 
             String stored = "sp_ActualizarEmail";
             em.getTransaction().begin();
@@ -26,35 +24,11 @@ public class SQLClienteDAO implements ClienteDAO {
             StoredProcedureQuery storedProcedure = em.createStoredProcedureQuery(stored);
 
             storedProcedure.registerStoredProcedureParameter("EmailActual", String.class, ParameterMode.IN);
-            storedProcedure.registerStoredProcedureParameter("EXISTSID", Integer.class, ParameterMode.OUT);
+            storedProcedure.registerStoredProcedureParameter("EmailNuevo", Integer.class, ParameterMode.IN);
             storedProcedure.setParameter("EmailActual", emailActual);
             storedProcedure.execute();
-            update = (int) storedProcedure.getOutputParameterValue("EXISTSID");
             em.getTransaction().commit();
-        } catch (Exception e) {
-            e.getStackTrace();
-        }
 
-        return update;
-    }
-
-    @Override
-    public int updateEmail(int idEmail, String emailNuevo) {
-        int update = 0;
-        try {
-
-            String stored = "UPDATE SalesAW.Person.EmailAddress set EmailAddress = '" + emailNuevo
-                    + "' WHERE EmailAddressID = '" + idEmail + "';";
-            em.getTransaction().begin();
-
-            Query q = em.createNativeQuery(stored);
-            update = q.executeUpdate();
-            em.getTransaction().commit();
-        } catch (Exception e) {
-            e.getStackTrace();
-        }
-
-        return update;
     }
 
 }

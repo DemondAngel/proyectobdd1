@@ -6,9 +6,7 @@ import com.bddp1.model.OrdenTerritorio;
 public interface OrdenDAO {
     public List<OrdenTerritorio> getCustomerDiffTerritory();
 
-    public int proveProductsOrder(int idSalesOrder);
+    public void updateProductsOrder(int idSalesOrder, int quantity);
 
-    public int updateProductsOrder(int idSalesOrder, int quantity);
-
-    public int updateOrdenDeliver(int idSalesOrder, int shipMethodID);
+    public void updateOrdenDeliver(int idSalesOrder, int shipMethodID);
 }

@@ -22,7 +22,6 @@ public class SQLVentaDAO implements VentaDAO {
     @Override
     public List<Venta> getTotalVentasProducto(int category) {
         List<Venta> ventas = null;
-        try {
 
             String stored = "sp_TotVentas";
             em.getTransaction().begin();
@@ -45,10 +44,6 @@ public class SQLVentaDAO implements VentaDAO {
             }
 
             em.getTransaction().commit();
-        } catch (Exception e) {
-            e.getStackTrace();
-            System.out.println(e.getLocalizedMessage());
-        }
 
         return ventas;
     }

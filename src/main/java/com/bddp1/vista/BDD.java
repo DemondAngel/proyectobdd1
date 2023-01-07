@@ -386,76 +386,37 @@ public class BDD extends javax.swing.JFrame {
 
                     ProductoDAO sqlVentaDAO = new SQLProductoDAO(em);
 
-                    pId = sqlVentaDAO.getProductIdtoUpdate(Integer.parseInt(category));
+                    sqlVentaDAO.getProductIdtoUpdate(Integer.parseInt(category));
 
                     System.out.println("Conexión realizada con exito");
-                } catch (Exception e) {
-                    System.out.println("No se pudo realizar la conexion");
-                    // System.out.println(e.toString());
-
-                } finally {
-
-                    try {
-                        if (em != null) {
-                            em.close();
-                        }
-
-                    } catch (Exception e) {
-
-                    }
-
-                    try {
-                        if (mf != null) {
-                            mf.close();
-                        }
-
-                    } catch (Exception e) {
-
-                    }
-
-                }
-
-                try {
-                    mf = Persistence.createEntityManagerFactory("persistenciaProduction");
-                    em = mf.createEntityManager();
-
-                    ProductoDAO sqlVentaDAO = new SQLProductoDAO(em);
-
-                    int update = sqlVentaDAO.updateStock(pId);
-
-                    System.out.println("Conexión realizada con exito");
-                } catch (Exception e) {
-                    System.out.println("No se pudo realizar la conexion");
-                    // System.out.println(e.toString());
-
-                } finally {
-
-                    try {
-                        if (em != null) {
-                            em.close();
-                        }
-
-                    } catch (Exception e) {
-
-                    }
-
-                    try {
-                        if (mf != null) {
-                            mf.close();
-                        }
-
-                    } catch (Exception e) {
-
-                    }
-
-                }
-                if (pId == 0) {
-                    JOptionPane.showMessageDialog(rootPane, "Error", "Confirmación",
-                            JOptionPane.CLOSED_OPTION);
-                } else {
                     JOptionPane.showMessageDialog(rootPane, "Actualización realizada con éxito", "Confirmación",
                             JOptionPane.CLOSED_OPTION);
-                    // verResultados.setVisible(true);
+                } catch (Exception e) {
+                    System.out.println("No se pudo realizar la conexion");
+                    // System.out.println(e.toString());
+                    JOptionPane.showMessageDialog(rootPane, "Error", "Confirmación",
+                            JOptionPane.CLOSED_OPTION);
+                    
+                } finally {
+
+                    try {
+                        if (em != null) {
+                            em.close();
+                        }
+
+                    } catch (Exception e) {
+
+                    }
+
+                    try {
+                        if (mf != null) {
+                            mf.close();
+                        }
+
+                    } catch (Exception e) {
+
+                    }
+
                 }
                 break;
             }
@@ -501,88 +462,54 @@ public class BDD extends javax.swing.JFrame {
             case 4: {
                 IDOrder = Integer.parseInt(Var1.getText());
                 Cantidad = Integer.parseInt(Var2.getText());
-                int ordenId = 0;
                 try {
                     mf = Persistence.createEntityManagerFactory("persistencia");
                     em = mf.createEntityManager();
                     OrdenDAO ordenDAo = new SQLOrdenDAO(em);
 
-                    ordenId = ordenDAo.proveProductsOrder(IDOrder);
-
+                    ordenDAo.updateProductsOrder(IDOrder, Cantidad);
+                    verResultados.setVisible(true);
                 } catch (Exception e) {
-
-                } finally {
-
-                    try {
-                        if (em != null) {
-                            em.close();
-                        }
-
-                    } catch (Exception e) {
-
-                    }
-
-                    try {
-                        if (mf != null) {
-                            mf.close();
-                        }
-
-                    } catch (Exception e) {
-
-                    }
-
-                }
-
-                try {
-                    mf = Persistence.createEntityManagerFactory("persistenciaSales");
-                    em = mf.createEntityManager();
-                    List<OrdenTerritorio> ordenes = null;
-                    OrdenDAO ordenDAo = new SQLOrdenDAO(em);
-                    int update = ordenDAo.updateProductsOrder(IDOrder, Cantidad);
-                    System.out.println(update);
-                } catch (Exception e) {
-
-                } finally {
-
-                    try {
-                        if (em != null) {
-                            em.close();
-                        }
-
-                    } catch (Exception e) {
-
-                    }
-
-                    try {
-                        if (mf != null) {
-                            mf.close();
-                        }
-
-                    } catch (Exception e) {
-
-                    }
-
-                }
-                if (ordenId == 0) {
                     JOptionPane.showMessageDialog(rootPane, "No se actualizó", "Confirmación",
                             JOptionPane.CLOSED_OPTION);
-                } else {
-                    verResultados.setVisible(true);
+                } finally {
+
+                    try {
+                        if (em != null) {
+                            em.close();
+                        }
+
+                    } catch (Exception e) {
+
+                    }
+
+                    try {
+                        if (mf != null) {
+                            mf.close();
+                        }
+
+                    } catch (Exception e) {
+
+                    }
+
                 }
+
                 break;
             }
             case 5: {
                 IDOrder = Integer.parseInt(Var1.getText());
                 method = Integer.parseInt(Var2.getText());
-                int update = 0;
                 try {
                     mf = Persistence.createEntityManagerFactory("persistencia");
                     em = mf.createEntityManager();
                     OrdenDAO ordenDAo = new SQLOrdenDAO(em);
-                    update = ordenDAo.updateOrdenDeliver(IDOrder, method);
-
+                    ordenDAo.updateOrdenDeliver(IDOrder, method);
+                    JOptionPane.showMessageDialog(rootPane, "Actualización realizada con éxito", "Confirmación",
+                            JOptionPane.CLOSED_OPTION);
+                    verResultados.setVisible(false);
                 } catch (Exception e) {
-
+                    JOptionPane.showMessageDialog(rootPane, "No se actualizó", "Confirmación",
+                            JOptionPane.CLOSED_OPTION);
                 } finally {
 
                     try {
@@ -604,18 +531,10 @@ public class BDD extends javax.swing.JFrame {
                     }
 
                 }
-                if (update == 0) {
-                    JOptionPane.showMessageDialog(rootPane, "No se actualizó", "Confirmación",
-                            JOptionPane.CLOSED_OPTION);
-                } else {
-                    JOptionPane.showMessageDialog(rootPane, "Actualización realizada con éxito", "Confirmación",
-                            JOptionPane.CLOSED_OPTION);
-                    verResultados.setVisible(false);
-                }
                 break;
             }
             case 6: {
-                // emailA = Var1.getText();
+                 emailA = Var1.getText();
                 emailN = Var2.getText();
 
                 int idEmail = 0;
@@ -623,67 +542,39 @@ public class BDD extends javax.swing.JFrame {
                     mf = Persistence.createEntityManagerFactory("persistencia");
                     em = mf.createEntityManager();
                     ClienteDAO personDAO = new SQLClienteDAO(em);
-                    idEmail = personDAO.proveEmail(emailN);
-                } catch (Exception e) {
-
-                } finally {
-
-                    try {
-                        if (em != null) {
-                            em.close();
-                        }
-
-                    } catch (Exception e) {
-
-                    }
-
-                    try {
-                        if (mf != null) {
-                            mf.close();
-                        }
-
-                    } catch (Exception e) {
-
-                    }
-
-                }
-
-                try {
-                    mf = Persistence.createEntityManagerFactory("persistenciaSales");
-                    em = mf.createEntityManager();
-                    ClienteDAO clienteDAO = new SQLClienteDAO(em);
-                    int update = clienteDAO.updateEmail(idEmail, emailN);
-                    System.out.println(update);
-                } catch (Exception e) {
-
-                } finally {
-
-                    try {
-                        if (em != null) {
-                            em.close();
-                        }
-
-                    } catch (Exception e) {
-
-                    }
-
-                    try {
-                        if (mf != null) {
-                            mf.close();
-                        }
-
-                    } catch (Exception e) {
-
-                    }
-
-                }
-                if (idEmail == 0) {
-                    JOptionPane.showMessageDialog(rootPane, "No existe ese correo", "Confirmación",
-                            JOptionPane.CLOSED_OPTION);
-                } else {
+                    personDAO.updateEmail(emailA, emailN);
                     JOptionPane.showMessageDialog(rootPane, "Actualización realizada con éxito", "Confirmación",
                             JOptionPane.CLOSED_OPTION);
                     verResultados.setVisible(false);
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(rootPane, "No existe ese correo", "Confirmación",
+                            JOptionPane.CLOSED_OPTION);
+                } finally {
+
+                    try {
+                        if (em != null) {
+                            em.close();
+                        }
+
+                    } catch (Exception e) {
+
+                    }
+
+                    try {
+                        if (mf != null) {
+                            mf.close();
+                        }
+
+                    } catch (Exception e) {
+
+                    }
+
+                }
+
+                if (idEmail == 0) {
+                    
+                } else {
+                    
                 }
                 break;
             }
