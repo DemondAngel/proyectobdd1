@@ -4,6 +4,10 @@
  Determinar el total de las ventas de los productos con la categoría que se proveade argumento de entrada en la consulta,para cada uno de los territorios registradosen la base de datos.
  * */
 use AdventureWorks2019;
+
+
+/*Consulta, no es nescesaria la transaccion */
+
 drop procedure if exists sp_TotVentas;
 CREATE or alter PROCEDURE sp_TotVentas @categoryID int as
 begin 
@@ -24,8 +28,18 @@ end
 
 exec sp_TotVentas 2;
 
+
+
+
+
+
 /*Determinar el producto más solicitado para la región (atributo group de salesterritory)“Noth America”y en que territorio de la región tiene mayordemanda.Quitando el Top 1, da la lista de todos los productos
  * */
+
+ 
+/*Consulta, no es nescesaria la transaccion */
+
+
 drop procedure if exists sp_ProdMasSolicitado;
 CREATE or alter PROCEDURE sp_ProdMasSolicitado @Territory nvarchar(50) AS
 BEGIN 
@@ -49,21 +63,43 @@ exec sp_ProdMasSolicitado 'North America'
 	 * */
 
 	 /*]?????????????????????????????????????????????*/
+
+
+
 	drop procedure if exists sp_ActualizarStock;
 CREATE or alter PROCEDURE sp_ActualizarStock @Categ int 
 AS
 BEGIN
 	declare @pId int;
+	
 	SELECT @pId = ProductID FROM [PRODUCTIONAW].productionAW.Production.ProductInventory pii WHERE
 	pii.LocationID in(SELECT ProductID FROM [PRODUCTIONAW].productionAW.Production.ProductSubcategory WHERE ProductCategoryID = @Categ);
-	
+
+	BEGIN TRANSACTION
+	BEGIN TRY
+
 	update PRODUCTIONAW.productionAW.Production.ProductInventory set Quantity = Quantity*1.05 WHERE ProductID = @pId;
+	COMMIT TRANSACTION 
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRANSACTION 
+		PRINT 'HA OCURRIDO UN ERROR'
+		END CATCH
 END
+
+/*EXCEc prueba*/
 select * from PRODUCTIONAW.productionAW.Production.ProductInventory where ProductID = 1;
 exec sp_ActualizarStock '1'
 
+
+
+
 /* Determinar si hay clientes que realizan ordenes en territorios diferentes al que se encuentran. 
 	 */
+
+	 
+/*Consulta, no es nescesaria la transaccion */
+
 
 drop procedure if exists sp_CustomerDiferrentOrder;
 CREATE or alter PROCEDURE sp_CustomerDiferrentOrder  AS 
@@ -76,10 +112,17 @@ GROUP by scus.TerritoryID, soh.TerritoryID, st.[Name]
 END
 exec sp_CustomerDiferrentOrder;
 
+
+
 /*
  Actualizar  la  cantidad  de  productos  de  una  orden que  se provea  como argumento en la instrucción de actualización.
 NOTA: Lista la cantidad de productos, nombre y el ID de la Orden de venta
 	 * */
+
+
+
+
+
 drop procedure if exists sp_ActualizarCant
 CREATE or alter PROCEDURE sp_ActualizarCant @SOID int, @SOCant int
 AS
@@ -89,13 +132,27 @@ BEGIN
 	FROM  SALESAW.SalesAW.Sales.SalesOrderDetail sod
 	inner join [PRODUCTIONAW].productionAW.Production.Product Prod 
 	on sod.ProductID = Prod.ProductID and sod.SalesOrderID = @SOID)
-	begin 
+	
+	BEGIN TRANSACTION 
+	BEGIN TRY
+
+
 	update  SALESAW.SalesAW.Sales.SalesOrderDetail set OrderQty = @SOCant where SalesOrderID = @SOID
-	end
+	COMMIT TRANSACTION
+	END TRY
+		BEGIN CATCH
+		ROLLBACK TRANSACTION 
+		PREINT 'Ha ocurrido un error'
+		END CATCH
 END
+
+
 /*
  Actualizar el método de envío de una orden que se reciba como argumento en la instrucción de actualización.  NOTA: Lista todas las ordenenes dependiendo el metodo de envio
  */	
+
+
+
 drop procedure if exists sp_ActualizarMetEnvio;	
 CREATE or alter PROCEDURE sp_ActualizarMetEnvio @SOID int,@SHIPMTHID int AS
 BEGIN 
@@ -105,12 +162,25 @@ BEGIN
 	FROM  SALESAW.SalesAW.Sales.SalesOrderHeader soh inner join SALESAW.SalesAW.Purchasing.ShipMethod MetEnv
 	on soh.ShipMethodID = MetEnv.ShipMethodID
 	where soh.SalesOrderID = @SOID)
-	begin
+	BEGIN TRANSACTION 
+	BEGIN TRY 
+
 		UPDATE AdventureWorks2019.Sales.SalesOrderHeader set ShipMethodID = @SHIPMTHID WHERE SalesOrderID = @SOID;
-	end
+
+	COMMIT TRANSACTION
+	END TRY
+		BEGIN CATCH
+		ROLLBACK TRANSACTION 
+		PRINT 'Ha ocurrido un error'
+		END CATCH
+	
 END
 
 select * from  SALESAW.SalesAW.Purchasing.ShipMethod;
+
+
+
+
 /*
  Actualizar el correo electrónico de una cliente que se reciba como argumento en la instrucción de actualización. NOTA: Lista a la persona y su correElectronico, parametrizar por correo electronico, en lugar de BusinessEntityID
  */
@@ -125,8 +195,19 @@ inner join openQuery(SALESAW,'select EmailAddress, BusinessEntityID from salesAW
 on Pers.BusinessEntityID = Email.BusinessEntityID 
 	where Email.EmailAddress = @EmailActual
 	)
-	begin
+	
+
+	BEGIN TRANSACTION 
+	BEGIN TRY 
+
 	UPDATE SALESAW.SalesAW.Person.EmailAddress set EmailAddress = @EmailNuevo  WHERE EmailAddressID = @EmailActual
-	end
+
+		COMMIT TRANSACTION
+	END TRY
+		BEGIN CATCH
+		ROLLBACK TRANSACTION 
+		PRINT 'Ha ocurrido un error'
+		END CATCH
 END;
 	
+
