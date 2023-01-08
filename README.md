@@ -11,3 +11,5 @@ La filosofía de JPA es transaccional, es decir, queda operacion que realiza den
 En este proyecto se trabajaron todas las consultas con transacciones de forma igualitaria para seguir esta filosofía. NO ES NECESARIO programar todo con transacciones
 debido a que algunas consultas son sencillas. Para este proyecto se considera que las consultas que tienen actualizaciones son las que deben llevar la transacción de forma obligatoria, para que en un caso severo se realice un rollback y los datos queden inmunes a los cambios que se estuvieron realizando. Además de que estos
 verifican la información antes de actualizarla por lo que si se tiene que llevar un registro de ello.
+
+Ademas de actualizar nuestro script de la base de datos AdventureWorks2019 modificando los StoreProcedures para realizar consultas transaccionales, en especifico los updates, cuidando la inconsistencia de datos entrantes. Como mencionamos modificamos las consultas y en caso de una inconsistencia de datos con ayuda de JPA aplicariamos el rollback de la informacion. 
